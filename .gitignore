@@ -1,0 +1,7 @@
+/predictions/.vs
+/predictions/.vs/*
+/predictions/predictions.pyproj
+/components/__pycache__
+/components/__pycache__/*
+/feature_importance/.vs
+/feature_importance/.vs/*
