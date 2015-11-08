@@ -5,11 +5,12 @@ from reading_test_data import test_data
 from write_results import write_predictions
 
 from sklearn import metrics
-from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+# fit a k-nearest neighbor model to the data
 
-model = GaussianNB()
+model = KNeighborsClassifier(5,'distance')
 model.fit(train_data_x[:,1:], train_data_y[:,1])
 
 predicted = model.predict_proba(test_data[:,1:])
 
-write_predictions("nb_submission.csv", test_data[:,0], predicted)
+write_predictions("k_nearest.csv", test_data[:,0], predicted)

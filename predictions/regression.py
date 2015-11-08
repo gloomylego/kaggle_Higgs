@@ -11,8 +11,13 @@ model.fit(train_data_x[:,1:], train_data_y[:,1])
 #print(model)
 # make predictions
 #expected = train_data_y[:,1]
-predicted = model.predict(test_data[:,1:])
-probability = model.decision_function(test_data[:,1:])
+#predicted = model.predict(test_data[:,1:])
+#probability = model.decision_function(test_data[:,1:])
 
-#with all features result is 2.01342 ~ 1508 place
-write_predictions("regression.csv",test_data[:,0],probability,predicted)
+##with all features result is 2.01342 ~ 1508 place
+#write_predictions("regression.csv",test_data[:,0],probability,predicted)
+
+predicted = model.predict_proba(test_data[:,1:])
+
+
+write_predictions("regression.csv",test_data[:,0],predicted)

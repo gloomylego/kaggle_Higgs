@@ -28,7 +28,8 @@ all = list(csv.reader(open(filename_train,"r"), delimiter=','))
 
 # In[3]:
 
-xs = np.array([row[1:-2] for row in all[1:]])
+#xs = np.array([row[1:-2] for row in all[1:]])
+xs = np.array([list(map(float, row[1:-2])) for row in all[1:]])
 (numPoints,numFeatures) = xs.shape
 
 
@@ -107,7 +108,8 @@ weightsBalancedTrain = np.array([0.5 * weightsTrain[i]/sumSWeightsTrain
 numBins = 10
 
 
-# <code>logPs[fI,bI]</code> will be the log probability of a data point <code>x</code> with <code>binMaxs[bI - 1] < x[fI] <= binMaxs[bI]</code> (with <code>binMaxs[-1] = -</code>$\infty$ by convention) being a signal under uniform priors $p(\text{s}) = p(\text{b}) = 1/2$.
+# logPs[fI,bI] will be the log probability of a data point x with binMaxs[bI - 1] < x[fI] <= binMaxs[bI] 
+# (with binMaxs[-1] = $\infty$ by convention) being a signal under uniform priors p(s) = p(b) = 1/2.
 
 # In[11]:
 
@@ -137,7 +139,9 @@ for fI in range(numFeatures):
         logPs[fI, bI] = math.log(wS/(wS+wB))
 
 
-# The score function we will use to sort the test examples. For readability it is shifted so negative means likely background (under uniform prior) and positive means likely signal. <code>x</code> is an input vector.
+# The score function we will use to sort the test examples. For readability it is shifted so
+# negative means likely background (under uniform prior) and positive means likely signal.
+# x is an input vector.
 
 # In[13]:
 
@@ -147,7 +151,7 @@ def score(x):
         bI = 0
         # linear search for the bin index of the fIth feature
         # of the signal
-        while (bI < len(binMaxs[fI]) - 1) and (float(x[fI]) > binMaxs[fI, bI]):
+        while (bI < len(binMaxs[fI]) - 1) and (x[fI] > binMaxs[fI, bI]):
             bI += 1
         logP += logPs[fI, bI] - math.log(0.5)
     return logP
@@ -160,7 +164,7 @@ def score(x):
 # \text{AMS} = \sqrt{ 2 \left( (s + b + 10) \ln \left( 1 + \frac{s}{b +
 #     10} \right) - s \right) }
 # \end{equation*}
-# <code>s</code> and <code>b</code> are the sum of signal and background weights, respectively, in the selection region.
+# s and b are the sum of signal and background weights, respectively, in the selection region.
 
 # In[14]:
 
@@ -168,8 +172,10 @@ def AMS(s,b):
     assert s >= 0
     assert b >= 0
     bReg = 10.
+    #assert math.log(1.01 + s / (b + bReg)) > 0
     return math.sqrt(2 * ((s + b + bReg) * 
-                          math.log(1 + s / (b + bReg)) - s))
+                          math.log(1.01 + s / (b + bReg))
+                          - s))
 
 
 # Computing the scores on the validation set
@@ -193,7 +199,7 @@ tIIs = validationScores.argsort()
 wFactor = 1.* numPoints / numPointsValidation
 
 
-# Initializing $s$ and $b$ to the full sum of weights, we start by having all points in the selectiom region.
+# Initializing s and b to the full sum of weights, we start by having all points in the selectiom region.
 
 # In[35]:
 
@@ -201,7 +207,7 @@ s = np.sum(weightsValidation[sSelectorValidation])
 b = np.sum(weightsValidation[bSelectorValidation])
 
 
-# <code>amss</code> will contain AMSs after each point moved out of the selection region in the sorted validation set.
+# amss will contain AMSs after each point moved out of the selection region in the sorted validation set.
 
 # In[36]:
 
@@ -216,7 +222,8 @@ amsMax = 0
 threshold = 0.0
 
 
-# We will do len(tIIs) iterations, which means that amss[-1] is the AMS when only the point with the highest score is selected.
+# We will do len(tIIs) iterations, which means that amss[-1] is the AMS when only the point
+# with the highest score is selected.
 
 # In[38]:
 
@@ -256,7 +263,9 @@ plt.plot(amss)
 # In[42]:
 
 test = list(csv.reader(open(filename_test, "r"),delimiter=','))
-xsTest = np.array([row[1:] for row in test[1:]])
+
+#xsTest = np.array([row[1:] for row in test[1:]])
+xsTest = np.array([list(map(float, row[1:])) for row in test[1:]])
 
 
 # In[43]:
