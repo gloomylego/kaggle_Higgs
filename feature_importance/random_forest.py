@@ -3,13 +3,13 @@
 #using http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 import sys, os  #is necessary for relative import
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'components')) #is necessary for relative import
-from configure import configure_verbose_mode
-from reading_train_data import *
+from configure import configure_verbose_mode, args_x
+from reading_train_data import txs, tys
 from sklearn.ensemble import ExtraTreesClassifier
 import matplotlib.pyplot as plt
 
 forest = ExtraTreesClassifier(n_estimators=500, random_state=0)
-forest.fit(train_data_x[:, 1:], train_data_y[:,1]) #skip id with [:, 1:]; training only with the result value(s or b)
+forest.fit(txs, tys[:,1]) #skip id with [:, 1:]; training only with the result value(s or b)
 # display the relative importance of each attribute
 importances = forest.feature_importances_
 indices = np.argsort(importances)[::-1]
