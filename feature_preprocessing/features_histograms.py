@@ -36,7 +36,19 @@ def histImage(vals, yvals, bars = number_of_bars, path = "", figure_name = ""):
         plt.savefig(path)
     plt.close()
 
-
+#unfiltered data
+"""
 for i in range(v_start,v_end):
     stri = str((i+1)//10) + str((i+1)%10)
     histImage(txs[:,i], tys[:,1], number_of_bars, "../calculated/features_histograms/" + stri + args_x[i+1] + ".png", args_x[i+1])
+"""
+#filtered data
+
+for i in range(v_start,v_end):
+    vals = np.array(txs[:,i])
+    corSelector = np.array([v > -900 for v in vals])
+    xs = vals[corSelector]
+    ys = np.array(tys[:,1])[corSelector]
+    
+    stri = str((i+1)//10) + str((i+1)%10)
+    histImage(xs, ys, number_of_bars, "../calculated/features_histograms_filtered/" + stri + args_x[i+1] + "_f.png", args_x[i+1])

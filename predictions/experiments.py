@@ -33,6 +33,7 @@ plt.xticks(s_r[:,0], list(map(int,s_r[:,0])),rotation = 90)
 plt.show()
 """
 
+"""
 importances = np.array(fe_rf).argsort()[::-1]
 
 importances[12] = importances[13]
@@ -43,3 +44,4 @@ model = LogisticRegression()
 model.fit(xdat, tys[:,1])
 predicted = model.predict_proba(ddat)
 write_predictions("../../regression_no_13t.csv",tis,predicted)
+"""
