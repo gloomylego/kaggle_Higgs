@@ -1,4 +1,4 @@
-#Support Vector Machines
+﻿#Support Vector Machines
 import sys, os  #is necessary for relative import
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'components')) #is necessary for relative import
 from reading_train_data import txs, tys
