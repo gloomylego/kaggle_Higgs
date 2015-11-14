@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5773c18f-55c7-4258-b274-4c92901b98d6}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>ree.py</StartupFile>
+    <StartupFile>xgboost.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="ree_on_LogisticRegression.py" />
     <Compile Include="rf_show_image.py" />
+    <Compile Include="xgboost.py" />
   </ItemGroup>
   <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />

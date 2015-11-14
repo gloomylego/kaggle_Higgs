@@ -23,3 +23,27 @@ def write_predictions(filename,event_id,classes_prob):
     submission = np.append([out_label], submission, axis=0)
 
     np.savetxt(filename,submission,fmt='%s',delimiter=',')
+
+
+def write_predictions2(filename, event_id, regressions, threshold):
+    assert len(event_id) == len(regressions)
+    if configure_verbose_mode:
+        print("Start writing in the file %s" % (filename))
+    
+    rgs = np.array(regressions)
+    sSelector = np.array([v <= threshold for v in rgs])
+
+    cp_sorted_inv = rgs.argsort()[::-1]
+
+    cp_sorted = list(cp_sorted_inv)
+    for tI,tII in zip(range(len(cp_sorted_inv)),
+                  cp_sorted_inv):
+        cp_sorted[tII] = tI
+    
+    ids = list(map(int,event_id))
+    submission = np.array([[str(ids[i]),str(cp_sorted[i]+1),
+                       's' if sSelector[i] else 'b']
+            for i in range(len(event_id))])
+    submission = np.append([out_label], submission, axis=0)
+
+    np.savetxt(filename,submission,fmt='%s',delimiter=',')

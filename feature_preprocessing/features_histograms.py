@@ -30,14 +30,14 @@ def histImage(vals, yvals, bars = number_of_bars, path = "", figure_name = ""):
     plt.title("Data distribution")
     plt.suptitle(figure_name)
     plt.legend(['background','signal'],fontsize = 'small')
-    part = np.array([v[1]/(v[0]+v[1]) if v[0]+v[1] != 0 else 0 for v in zip(y[0],y[1])])
-    
+    #y[0] ~ background, y[1] ~ signal + background
+    part = np.array([1.-v[0]/v[1] if v[1] != 0 else 0 for v in zip(y[0],y[1])])
     assert len(bins) == len(part)+1
     writing_parts = np.array([[str(bins[i]),str(bins[i+1]),part[i]] 
             for i in range(len(part))])
     writing_parts = np.append([['Left boundary','Right boundary','S/(B+S)']],writing_parts, axis=0)
     np.savetxt(path + ".csv", writing_parts, fmt='%s', delimiter=',')
-    #plt.show()
+
     if path == "":    
         plt.show()
     else:
@@ -45,7 +45,7 @@ def histImage(vals, yvals, bars = number_of_bars, path = "", figure_name = ""):
     plt.close()
 
 #unfiltered data
-"""
+
 for i in range(v_start,v_end):
     stri = str((i+1)//10) + str((i+1)%10)
     histImage(txs[:,i], tys[:,1], number_of_bars, "../calculated/features_histograms/" + stri + args_x[i+1], args_x[i+1])
@@ -60,3 +60,4 @@ for i in range(v_start,v_end):
     
     stri = str((i+1)//10) + str((i+1)%10)
     histImage(xs, ys, number_of_bars, "../calculated/features_histograms_filtered/" + stri + args_x[i+1] + "_f", args_x[i+1])
+"""
