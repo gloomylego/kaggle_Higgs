@@ -1,7 +1,7 @@
 #python 3.5
 
 
-configure_release_mode = True#False# #for time saving
+configure_release_mode = True#False #for time saving
 configure_verbose_mode = True
 
 
