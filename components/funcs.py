@@ -1,8 +1,23 @@
 ﻿from sklearn.linear_model import *
 import numpy as np
 import pandas as ps
-from configure import args_x
+from configure import args_x, configure_verbose_mode
 from sklearn import preprocessing
+from sklearn.cluster import KMeans
+
+
+def k_nearest_cluster(xs,ds,n):
+    model = KMeans(n_clusters=n, precompute_distances = True, n_jobs=1)#multiparallel doesn't work :(
+    model.fit(xs)
+    frame_x = ps.DataFrame(model.predict(xs)[None].T,columns=["Mnew_knearest" + str(n)])
+    frame_x.name = "Mnew_knearest" + str(n)
+
+    frame_d = ps.DataFrame(model.predict(ds)[None].T,columns=["Mnew_knearest" + str(n)])
+    frame_d.name = "Mnew_knearest" + str(n)
+
+    return (frame_x, frame_d)
+
+
 
 #;2nd param: background, signal; 3,4 ~ syl for bg and signal
 def get_threshold(weights,bss,cb = 0, cs = 1):
@@ -80,3 +95,18 @@ def scaling_according_to_weights(xs,ds):
     xs = np.array([np.divide(i,vals) for i in xs])
     ds = np.array([np.divide(i,vals) for i in ds])
     return (xs, ds)
+
+def feature_importance(filename, names, booster):
+    prev_fn = booster.feature_names
+    
+    fscore = [ (k,v) for k,v in booster.get_fscore().iteritems() ]
+    fscore.sort(key=lambda x:x[1], reverse=True)
+    
+    
+    if configure_verbose_mode:
+        print(fscore)
+    imps = np.array([[str(i[1]) for i in fscore]])
+    imps = np.append([[i[0] for i in fscore]], imps, axis=0)
+    np.savetxt(filename, imps,fmt='%s', delimiter=',')
+    #return the original state
+    booster.feature_names = prev_fn

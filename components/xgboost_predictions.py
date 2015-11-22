@@ -139,8 +139,8 @@ gbm.fit(train_x,labels,weights)
 
 #100 features maximum :(
 if get_feature_importance:
-    bst = gbm.booster()
     prev_fn = bst.feature_names
+    bst = gbm.booster()
     bst.feature_names = [i for i in train_x.columns.values]#args_x[1:]
     
     imps = bst.get_fscore()

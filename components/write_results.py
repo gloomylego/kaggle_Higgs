@@ -47,3 +47,28 @@ def write_predictions2(filename, event_id, regressions, threshold):
     submission = np.append([out_label], submission, axis=0)
 
     np.savetxt(filename,submission,fmt='%s',delimiter=',')
+
+def write_predictions3(filename, event_id, predicted, threshold):
+    assert len(event_id) == len(predicted)
+    res = zip(list(map(int, event_id)), predicted)
+    
+    rorder = {}
+    for k, v in sorted( res, key = lambda x:-x[1] ):
+        rorder[ k ] = len(rorder) + 1
+    # write out predictions
+    ntop = int( threshold * len(rorder ) )
+    lbs = np.array(['s' if rorder[k] <= ntop else 'b' for k,v in res])
+    #submission = np.array([[str(event_id[i]),str(cp_sorted[i]+1), lbs]
+    #                       for i in range(len(event_id))])
+    #submission = np.append([out_label], submission, axis=0)
+    #np.savetxt(filename,submission,fmt='%s',delimiter=',')
+    fo = open(filename, 'w')
+
+    fo.write('EventId,RankOrder,Class\n')
+    for k, v in res:        
+        lb = 's' if rorder[k] <= ntop else 'b'
+    # change output rank order to follow Kaggle convention
+        fo.write('%s,%d,%s\n' % ( k,  len(rorder)+1-rorder[k], lb ) )
+    fo.close()
+
+    print ('finished writing into prediction file')

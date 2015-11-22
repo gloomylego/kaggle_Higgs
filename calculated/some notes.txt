@@ -1,1 +1,2 @@
 percentage of S signal in training.csv = 0.342668
+don't change anything in this dir
